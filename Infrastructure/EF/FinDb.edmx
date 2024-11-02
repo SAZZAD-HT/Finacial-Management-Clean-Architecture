@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="FinManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="FinManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="JournalEntry">
           <Key>
             <PropertyRef Name="EntryId" />
@@ -23,12 +23,11 @@
             <PropertyRef Name="JLineId" />
           </Key>
           <Property Name="JLineId" Type="int" Nullable="false" />
-          <Property Name="EntryId" Type="int" Nullable="false" />
+          <Property Name="JEId" Type="int" Nullable="false" />
           <Property Name="AccountId" Type="int" Nullable="false" />
           <Property Name="DebitAmount" Type="decimal" Precision="18" Scale="6" Nullable="false" />
           <Property Name="CreditAmount" Type="decimal" Precision="18" Scale="6" />
           <Property Name="Description" Type="nvarchar" MaxLength="150" />
-          <Property Name="JID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -45,8 +44,7 @@
           <EntitySet Name="JournalEntryLine" EntityType="Self.JournalEntryLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FinManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -73,7 +71,7 @@
           <Property Name="DebitAmount" Type="Decimal" Precision="18" Scale="6" Nullable="false" />
           <Property Name="CreditAmount" Type="Decimal" Precision="18" Scale="6" />
           <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="JID" Type="Int32" Nullable="false" />
+          <Property Name="JEId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -113,13 +111,12 @@
           <EntitySetMapping Name="JournalEntryLines">
             <EntityTypeMapping TypeName="FinManagementModel.JournalEntryLine">
               <MappingFragment StoreEntitySet="JournalEntryLine">
+                <ScalarProperty Name="JEId" ColumnName="JEId" />
                 <ScalarProperty Name="JLineId" ColumnName="JLineId" />
-                <ScalarProperty Name="EntryId" ColumnName="EntryId" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="DebitAmount" ColumnName="DebitAmount" />
                 <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="JID" ColumnName="JID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

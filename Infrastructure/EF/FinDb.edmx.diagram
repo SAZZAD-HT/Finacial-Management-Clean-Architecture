@@ -5,9 +5,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="0e437e6207984f0c9223d8656a2f1fa8" Name="Diagram1">
-        <EntityTypeShape EntityType="FinManagementModel.JournalEntry" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="FinManagementModel.JournalEntryLine" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="FinManagementModel.User" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FinManagementModel.JournalEntry" Width="2" PointX="0.875" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FinManagementModel.JournalEntryLine" Width="1.875" PointX="3.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FinManagementModel.User" Width="1.5" PointX="7" PointY="1" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

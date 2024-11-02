@@ -20,6 +20,6 @@ namespace Infrastructure.EF
         public decimal DebitAmount { get; set; }
         public Nullable<decimal> CreditAmount { get; set; }
         public string Description { get; set; }
-        public int JID { get; set; }
+        public int JEId { get; set; }
     }
 }

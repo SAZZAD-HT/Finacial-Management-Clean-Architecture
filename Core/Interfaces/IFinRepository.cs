@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.DTos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace Core.Interfaces
 {
     public interface IFinRepository
     {
+        Task<IEnumerable<UserDto>> GetUser();
+        Task<UserDto> GetUserById(int id);
+        Task<string> AddUser(UserDto user);
     }
 }
