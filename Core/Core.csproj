@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTos\JournalAddDto.cs" />
     <Compile Include="DTos\UserDto.cs" />
     <Compile Include="Interfaces\IFinRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

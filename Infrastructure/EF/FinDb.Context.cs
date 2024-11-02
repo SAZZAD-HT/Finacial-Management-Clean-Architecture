@@ -25,6 +25,7 @@ namespace Infrastructure.EF
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<JournalEntry> JournalEntries { get; set; }
         public virtual DbSet<JournalEntryLine> JournalEntryLines { get; set; }
         public virtual DbSet<User> Users { get; set; }

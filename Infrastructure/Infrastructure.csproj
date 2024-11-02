@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyInjection.cs" />
+    <Compile Include="EF\Account.cs">
+      <DependentUpon>FinDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\FinDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -99,6 +102,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
     <Content Include="EF\FinDb.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>FinDb.edmx</DependentUpon>
@@ -109,9 +116,6 @@
       <DependentUpon>FinDb.edmx</DependentUpon>
       <LastGenOutput>FinDb.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

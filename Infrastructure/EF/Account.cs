@@ -12,13 +12,12 @@ namespace Infrastructure.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class JournalEntryLine
+    public partial class Account
     {
-        public int JLineId { get; set; }
-        public int JEId { get; set; }
         public int AccountId { get; set; }
-        public decimal DebitAmount { get; set; }
-        public Nullable<decimal> CreditAmount { get; set; }
+        public string AccountName { get; set; }
+        public string AccountType { get; set; }
+        public Nullable<decimal> Balance { get; set; }
         public string Description { get; set; }
     }
 }

@@ -12,5 +12,6 @@ namespace Core.Interfaces
         Task<IEnumerable<UserDto>> GetUser();
         Task<UserDto> GetUserById(int id);
         Task<string> AddUser(UserDto user);
+        Task<string> JournalAddUpdateDeleteDto(JournalAddDto dd);
     }
 }

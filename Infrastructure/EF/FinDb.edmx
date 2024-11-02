@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="FinManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="FinManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountType" Type="nvarchar" MaxLength="100" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="JournalEntry">
           <Key>
             <PropertyRef Name="EntryId" />
@@ -12,8 +22,8 @@
           <Property Name="EntryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="datetime" />
           <Property Name="Description" Type="nvarchar" MaxLength="100" />
-          <Property Name="TotalDebit" Type="nvarchar" MaxLength="100" />
-          <Property Name="TotalCredit" Type="nvarchar" MaxLength="100" />
+          <Property Name="TotalDebit" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="TotalCredit" Type="decimal" Precision="18" Scale="6" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedTime" Type="datetime" />
           <Property Name="ActionBy" Type="int" />
@@ -40,14 +50,26 @@
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityContainer Name="FinManagementModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntry" EntityType="Self.JournalEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntryLine" EntityType="Self.JournalEntryLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FinManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="JournalEntry">
           <Key>
             <PropertyRef Name="EntryId" />
@@ -55,8 +77,8 @@
           <Property Name="EntryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TotalDebit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TotalCredit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TotalDebit" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="TotalCredit" Type="Decimal" Precision="18" Scale="6" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
           <Property Name="ActionBy" Type="Int32" />
@@ -66,12 +88,11 @@
             <PropertyRef Name="JLineId" />
           </Key>
           <Property Name="JLineId" Type="Int32" Nullable="false" />
-          <Property Name="EntryId" Type="Int32" Nullable="false" />
+          <Property Name="JEId" Type="Int32" Nullable="false" />
           <Property Name="AccountId" Type="Int32" Nullable="false" />
           <Property Name="DebitAmount" Type="Decimal" Precision="18" Scale="6" Nullable="false" />
           <Property Name="CreditAmount" Type="Decimal" Precision="18" Scale="6" />
           <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="JEId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -84,6 +105,7 @@
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityContainer Name="FinManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
           <EntitySet Name="JournalEntries" EntityType="Self.JournalEntry" />
           <EntitySet Name="JournalEntryLines" EntityType="Self.JournalEntryLine" />
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -94,6 +116,17 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="FinManagementModelStoreContainer" CdmEntityContainer="FinManagementEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="FinManagementModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="JournalEntries">
             <EntityTypeMapping TypeName="FinManagementModel.JournalEntry">
               <MappingFragment StoreEntitySet="JournalEntry">
@@ -111,8 +144,8 @@
           <EntitySetMapping Name="JournalEntryLines">
             <EntityTypeMapping TypeName="FinManagementModel.JournalEntryLine">
               <MappingFragment StoreEntitySet="JournalEntryLine">
-                <ScalarProperty Name="JEId" ColumnName="JEId" />
                 <ScalarProperty Name="JLineId" ColumnName="JLineId" />
+                <ScalarProperty Name="JEId" ColumnName="JEId" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="DebitAmount" ColumnName="DebitAmount" />
                 <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />

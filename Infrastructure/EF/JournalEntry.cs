@@ -17,8 +17,8 @@ namespace Infrastructure.EF
         public int EntryId { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public string Description { get; set; }
-        public string TotalDebit { get; set; }
-        public string TotalCredit { get; set; }
+        public Nullable<decimal> TotalDebit { get; set; }
+        public Nullable<decimal> TotalCredit { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public Nullable<int> ActionBy { get; set; }
