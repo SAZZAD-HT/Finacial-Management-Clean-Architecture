@@ -15,6 +15,9 @@ namespace Application.Command
     {
         public int UserID { get; set; }
         public string UserName { get; set; }
+        public string AccountType { get; set; }
+        public decimal Balance { get; set; }
+        public string Description { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public Nullable<bool> IsActive { get; set; }
@@ -41,7 +44,11 @@ namespace Application.Command
                     UserName = request.UserName,
                     Email = request.Email,
                     Password = request.Password,
-                    IsActive = request.IsActive
+                    IsActive = request.IsActive,
+                    AccountType = request.AccountType,
+                    Balance= request.Balance,
+                    Description= request.Description
+
                 };
                 var data= _finRepository.AddUser(user);
                 return Task.FromResult(new AddUserResponse { IsSuccess = true, Message = "User added successfully" });

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repository
 {
-    public  class FinRepository: IFinRepository
+    public class FinRepository : IFinRepository
     {
         private readonly FinManagementEntities _context;
 
@@ -19,19 +19,26 @@ namespace Infrastructure.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable< UserDto>>GetUser()
+        public async Task<IEnumerable<UserDto>> GetUser(int id)
         {
-            var data = await 
+            var data = await
                 (from user in _context.Users
+                 join account in _context.Accounts on user.AccountId equals account.AccountId
+                 where (id==0 || user.UserID == id)
                  select new UserDto
-                 {  UserID=user.  UserID,
-                    UserName=user.  UserName,
-                    Email=user.  Email,
-                    Password=user.  Password,
-                    IsActive=user.IsActive,
+                 {
+                     UserID = user.UserID,
+                     UserName = user.UserName,
+                     Email = user.Email,
+                     Password = user.Password,
+                     IsActive = user.IsActive,
+                     AccountType = account.AccountType,
+                     Balance = (decimal)account.Balance,
+                     Description = account.Description
 
                  }).ToListAsync();
-            return data;    
+
+            return data;
 
         }
         public async Task<UserDto> GetUserById(int id)
@@ -52,22 +59,46 @@ namespace Infrastructure.Repository
         }
         public async Task<string> AddUser(UserDto user)
         {
-            string res;
+            string res = "";
             try
             {
                 if (user.UserID == 0)
                 {
+                    var ff = _context.Accounts.Add(new Account
+                    {
+                        AccountName = user.UserName,
+                        AccountType = user.AccountType,
+                        Balance = user.Balance,
+                        Description = user.Description,
+
+                    });
+                    _context.SaveChanges();
                     _context.Users.Add(new User
                     {
                         UserName = user.UserName,
                         Email = user.Email,
                         Password = user.Password,
-                        IsActive = user.IsActive
+                        IsActive = user.IsActive,
+                        AccountId = ff.AccountId,
                     });
-                    res = "User added successfully";
+
+                    res = res + " User added successfully";
                 }
                 else
                 {
+                    var account = await _context.Accounts.FindAsync(user.UserID);
+                    if (account != null)
+                    {
+                        account.AccountName = user.UserName;
+                        account.AccountType = user.AccountType;
+                        account.Balance = user.Balance;
+                        account.Description = user.Description;
+                        _context.Accounts.AddOrUpdate(account);
+                    }
+                    else
+                    {
+                        res = res + " Account not found";
+                    }
                     var data = await _context.Users.FindAsync(user.UserID);
                     if (data != null)
                     {
@@ -76,11 +107,11 @@ namespace Infrastructure.Repository
                         data.Password = user.Password;
                         data.IsActive = user.IsActive == null ? true : user.IsActive;
                         _context.Users.AddOrUpdate(data);
-                        res = "User updated successfully";
+                        res = res + "User updated successfully";
                     }
                     else
                     {
-                        res = "User not found";
+                        res = res + " User not found";
                     }
                 }
 
@@ -89,7 +120,7 @@ namespace Infrastructure.Repository
             }
             catch (Exception ex)
             {
-                return res=ex.Message;
+                return res = ex.Message;
             }
         }
 
@@ -105,7 +136,7 @@ namespace Infrastructure.Repository
                         Date = dd.Date,
                         Description = dd.Description,
                         TotalDebit = dd.JournalDetailAddDtos.Sum(x => x.Debit),
-                        TotalCredit = dd.JournalDetailAddDtos.Sum(x=>x.Credit),
+                        TotalCredit = dd.JournalDetailAddDtos.Sum(x => x.Credit),
                         IsActive = true,
                         CreatedTime = DateTime.Now,
                         ActionBy = dd.ActionBy
@@ -118,14 +149,14 @@ namespace Infrastructure.Repository
                         JournalEntryLine journalEntryLine = new JournalEntryLine
                         {
 
-                         AccountId=item.AccountId,
-                         DebitAmount=item.Debit,
-                         CreditAmount=item.Credit,
-                         Description=item.Description,
-                         JEId= journalEntry.EntryId
+                            AccountId = item.AccountId,
+                            DebitAmount = item.Debit,
+                            CreditAmount = item.Credit,
+                            Description = item.Description,
+                            JEId = journalEntry.EntryId
                         };
 
-                         _context.JournalEntryLines.Add(journalEntryLine);
+                        _context.JournalEntryLines.Add(journalEntryLine);
                     }
                     await _context.SaveChangesAsync();
                     res = "Journal entry added successfully";
@@ -138,13 +169,13 @@ namespace Infrastructure.Repository
                         data.Date = dd.Date;
                         data.Description = dd.Description;
                         data.TotalDebit = dd.JournalDetailAddDtos.Sum(x => x.Debit);
-                        data.TotalCredit = dd.JournalDetailAddDtos.Sum(x=>x.Credit);
+                        data.TotalCredit = dd.JournalDetailAddDtos.Sum(x => x.Credit);
                         data.IsActive = dd.IsActive;
                         data.CreatedTime = dd.CreatedTime;
                         data.ActionBy = dd.ActionBy;
                         _context.JournalEntries.AddOrUpdate(data);
                         res = "Journal entry updated successfully";
-                        foreach(var item in dd.JournalDetailAddDtos)
+                        foreach (var item in dd.JournalDetailAddDtos)
                         {
                             if (item.EntryDetailId == 0)
                             {
@@ -187,4 +218,40 @@ namespace Infrastructure.Repository
                 return res = ex.Message;
             }
         }
+        public async Task<IEnumerable<JournalAddDto>> GetallJournalInfo()
+        {
+            try
+            {
+                var data = await (from journal in _context.JournalEntries
+                                  select new JournalAddDto
+                                  {
+                                      EntryId = journal.EntryId,
+                                      Date = (DateTime)journal.Date,
+                                      Description = journal.Description,
+                                      TotalDebit = (decimal)journal.TotalDebit,
+                                      TotalCredit = (decimal)journal.TotalCredit,
+                                      IsActive = journal.IsActive,
+                                      CreatedTime = (DateTime)journal.CreatedTime,
+                                      ActionBy = journal.ActionBy,
+                                      JournalDetailAddDtos = (from journalDetail in _context.JournalEntryLines
+                                                              where journalDetail.JEId == journal.EntryId
+                                                              select new JournalDetailAddDto
+                                                              {
+                                                                  EntryDetailId = journalDetail.JLineId,
+                                                                  EntryId = journalDetail.JEId,
+                                                                  AccountId = journalDetail.AccountId,
+                                                                  Description = journalDetail.Description,
+                                                                  Debit = journalDetail.DebitAmount,
+                                                                  Credit = (decimal)journalDetail.CreditAmount,
+                                                              }).ToList()
+                                  }).ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                ex.Data["Method"] = "GetallJournalInfo";
+                throw;
+            }
+        }
+    }
 }

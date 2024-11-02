@@ -12,6 +12,9 @@ namespace Core.DTos
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public string AccountType { get; set; }
+        public decimal Balance { get; set; }
+        public string Description { get; set; }
+        public bool ? IsActive { get; set; }
     }
 }

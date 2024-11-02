@@ -62,13 +62,12 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Command\AddUserCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\AccountAndUserQuires.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{730385DD-7263-4746-A506-27DA9B393C2D}</Project>

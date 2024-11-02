@@ -9,9 +9,10 @@ namespace Core.Interfaces
 {
     public interface IFinRepository
     {
-        Task<IEnumerable<UserDto>> GetUser();
+        Task<IEnumerable<UserDto>> GetUser(int id);
         Task<UserDto> GetUserById(int id);
         Task<string> AddUser(UserDto user);
         Task<string> JournalAddUpdateDeleteDto(JournalAddDto dd);
+        Task<IEnumerable<JournalAddDto>> GetallJournalInfo();
     }
 }
